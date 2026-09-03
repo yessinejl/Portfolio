@@ -3,9 +3,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useProfile } from '@/context/ProfileContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function About() {
   const { profile } = useProfile();
+  const { t } = useLanguage();
 
   if (!profile || (!profile.about && !profile.photoUrl)) {
     return null;
@@ -57,14 +59,14 @@ export default function About() {
                 duration: 0.7,
                 delay: 0.15 
               }}
-              className="w-full md:w-7/12 text-center md:text-left"
+              className="w-full md:w-7/12 text-center md:text-left rtl:md:text-right"
             >
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6">
-                À Propos de moi
+                {t('about_title')}
               </h2>
-              <div className="h-1 w-20 bg-blue-600 dark:bg-blue-500 rounded-full mb-8 mx-auto md:mx-0"></div>
+              <div className="h-1 w-20 bg-blue-600 dark:bg-blue-500 rounded-full mb-8 mx-auto md:mx-0 rtl:md:mr-0 rtl:md:ml-auto"></div>
               
-              <div className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
+              <div className="text-lg text-slate-655 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
                 {profile.about}
               </div>
             </motion.div>

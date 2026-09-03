@@ -9,11 +9,13 @@ import { Project } from '@/types/project';
 import { FaGithub } from 'react-icons/fa6';
 import { ArrowLeft, Calendar, Tag, Globe, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function ProjectDetail() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
+  const { t, language } = useLanguage();
 
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
@@ -88,14 +90,13 @@ export default function ProjectDetail() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8 transition-colors duration-300">
-      
-      {/* Bouton retour */}
+          {/* Bouton retour */}
       <Link
         href="/#projects"
         className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white mb-8 group transition-colors font-medium text-sm"
       >
-        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-        Retour aux projets
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform" />
+        {t('proj_detail_back')}
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -140,7 +141,7 @@ export default function ProjectDetail() {
               </p>
               <div className="h-px bg-slate-150 dark:bg-slate-900 my-6" />
               <p>
-                {project.content || "Aucun détail supplémentaire n'a été spécifié pour ce projet. Il s'agit d'une démonstration construite avec une architecture propre intégrant les meilleures pratiques du développement web moderne."}
+                {project.content || t('proj_detail_default_content')}
               </p>
             </div>
           </div>
@@ -150,15 +151,15 @@ export default function ProjectDetail() {
         <div className="space-y-6">
           <div className="p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800 bg-white/70 dark:bg-slate-950/70 backdrop-blur-sm shadow-sm space-y-6">
             <h3 className="text-lg font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-900 pb-3">
-              Fiche technique
+              {t('proj_detail_specs')}
             </h3>
 
             {/* Date */}
             <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-350">
               <Calendar className="w-5 h-5 text-slate-400" />
               <div>
-                <span className="block font-semibold text-slate-800 dark:text-slate-200">Date de réalisation</span>
-                {new Date(project.created_at).toLocaleDateString('fr-FR', {
+                <span className="block font-semibold text-slate-800 dark:text-slate-200">{t('proj_detail_date')}</span>
+                {new Date(project.created_at).toLocaleDateString(language, {
                   year: 'numeric',
                   month: 'long',
                 })}
@@ -169,7 +170,7 @@ export default function ProjectDetail() {
             <div className="flex gap-3 text-sm text-slate-600 dark:text-slate-350">
               <Tag className="w-5 h-5 text-slate-400 mt-0.5" />
               <div>
-                <span className="block font-semibold text-slate-800 dark:text-slate-200 mb-2">Technologies</span>
+                <span className="block font-semibold text-slate-800 dark:text-slate-200 mb-2">{t('proj_detail_tech')}</span>
                 <div className="flex flex-wrap gap-1.5">
                   {project.tags.map((tag) => (
                     <span
@@ -192,7 +193,7 @@ export default function ProjectDetail() {
                   rel="noopener noreferrer"
                   className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow"
                 >
-                  Visiter le site
+                  {t('proj_detail_visit')}
                   <ExternalLink className="w-4 h-4" />
                 </a>
               )}
@@ -201,9 +202,9 @@ export default function ProjectDetail() {
                   href={project.github_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold transition-all duration-200"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-350 text-sm font-semibold transition-all duration-200"
                 >
-                  Code source sur GitHub
+                  {t('proj_detail_source')}
                   <FaGithub className="w-4 h-4" />
                 </a>
               )}

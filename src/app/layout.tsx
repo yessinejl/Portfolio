@@ -1,14 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Cairo, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { LanguageProvider } from "@/context/LanguageContext";
 import { ProfileProvider } from "@/context/ProfileContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const cairo = Cairo({
+  variable: "--font-cairo",
+  subsets: ["arabic"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -16,47 +24,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+import Preloader from "@/components/ui/Preloader";
+
 export const metadata: Metadata = {
-  title: "Mon Portfolio Professionnel | Développeur Full-Stack",
-  description: "Découvrez mon travail, mes compétences et mes projets de développement web de niveau professionnel.",
-  keywords: ["Développeur Web", "React", "Next.js", "TypeScript", "Supabase", "Tailwind CSS", "Portfolio SaaS"],
-  authors: [{ name: "Votre Nom", url: "https://votre-portfolio.com" }],
-  creator: "Votre Nom",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://votre-portfolio.com"),
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    url: "https://votre-portfolio.com",
-    title: "Mon Portfolio Professionnel | Développeur Full-Stack",
-    description: "Découvrez mon travail, mes compétences et mes projets de développement web de niveau professionnel.",
-    siteName: "Portfolio de Votre Nom",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Aperçu de mon portfolio professionnel",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Mon Portfolio Professionnel | Développeur Full-Stack",
-    description: "Découvrez mon travail, mes compétences et mes projets de développement web de niveau professionnel.",
-    images: ["/og-image.jpg"],
-    creator: "@votre_twitter",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
+  title: "Yassine Jlassia | Développeur Full-Stack & Mobile",
+  description: "Portfolio professionnel de Yassine Jlassia, Développeur Full-Stack spécialisé en Java, Spring Boot, React, Angular, Python et Flutter.",
+  keywords: ["Yassine Jlassia", "Développeur Full-Stack", "Spring Boot", "React", "Angular", "Python", "Django", "Flutter", "Symfony"],
+  authors: [{ name: "Yassine Jlassia", url: "https://github.com/Yassinejlassia" }],
+  creator: "Yassine Jlassia",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://portfolio-yassine.vercel.app"),
 };
 
 export default function RootLayout({
@@ -67,16 +43,19 @@ export default function RootLayout({
   return (
     <html lang="fr" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300`}
+        className={`${plusJakartaSans.variable} ${cairo.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300`}
       >
         <ThemeProvider>
-          <ProfileProvider>
-            <Navbar />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-          </ProfileProvider>
+          <Preloader />
+          <LanguageProvider>
+            <ProfileProvider>
+              <Navbar />
+              <main className="flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </ProfileProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

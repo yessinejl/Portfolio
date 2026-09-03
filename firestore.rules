@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Projets : Lecture publique, écriture réservée aux admins
+    match /projects/{project} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Configurations (profil, compétences, parcours) : Lecture publique, écriture réservée aux admins
+    match /settings/{setting} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Messages de contact : Création publique, lecture et gestion réservées aux admins
+    match /contacts/{contact} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}

@@ -13,6 +13,7 @@ import { Code2, Laptop, Wrench, Lightbulb, Server, Database } from 'lucide-react
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { SkillCategory } from '@/types/skill';
+import { useLanguage } from '@/context/LanguageContext';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Code2: <Code2 className="w-6 h-6 text-blue-500" />,
@@ -23,8 +24,50 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   Database: <Database className="w-6 h-6 text-orange-500" />
 };
 
+const DEFAULT_SKILL_CATEGORIES: SkillCategory[] = [
+  {
+    title: "Backend",
+    iconName: "Server",
+    skills: [
+      { name: "Java / Spring Boot", level: "Expert" },
+      { name: "Python (Django / FastAPI / Flask)", level: "Avancé" },
+      { name: "PHP / Symfony 6", level: "Avancé" }
+    ]
+  },
+  {
+    title: "Frontend & Mobile",
+    iconName: "Laptop",
+    skills: [
+      { name: "React.js / React Native", level: "Expert" },
+      { name: "Angular 16", level: "Avancé" },
+      { name: "Flutter", level: "Avancé" },
+      { name: "HTML5 / CSS3 / JavaScript / TypeScript", level: "Expert" }
+    ]
+  },
+  {
+    title: "Bases de Données & IA",
+    iconName: "Database",
+    skills: [
+      { name: "MySQL / PostgreSQL", level: "Expert" },
+      { name: "SQL Server", level: "Avancé" },
+      { name: "Scikit-learn / Machine Learning", level: "Intermédiaire" }
+    ]
+  },
+  {
+    title: "Outils & Méthodologies",
+    iconName: "Wrench",
+    skills: [
+      { name: "Git / GitHub", level: "Expert" },
+      { name: "API REST / JWT + OAuth2", level: "Expert" },
+      { name: "Postman / Stripe API", level: "Avancé" },
+      { name: "Agilité / Résolution de problèmes", level: "Expert" }
+    ]
+  }
+];
+
 export default function Skills() {
-  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
+  const { t } = useLanguage();
+  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>(DEFAULT_SKILL_CATEGORIES);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,8 +75,8 @@ export default function Skills() {
       try {
         const docRef = doc(db, 'settings', 'skills');
         const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setSkillCategories(docSnap.data().categories || []);
+        if (docSnap.exists() && docSnap.data().categories?.length) {
+          setSkillCategories(docSnap.data().categories);
         }
       } catch (error) {
         console.error('Erreur chargement compétences:', error);
@@ -80,7 +123,7 @@ export default function Skills() {
             transition={{ duration: 0.5 }}
             className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white"
           >
-            Mes Compétences
+            {t('skills_title')}
           </motion.h2>
           <motion.div 
             initial={{ scaleX: 0 }}
@@ -96,7 +139,7 @@ export default function Skills() {
             transition={{ delay: 0.3, duration: 0.5 }}
             className="mt-4 text-slate-600 dark:text-slate-400 text-lg"
           >
-            Voici les technologies et méthodologies que j'utilise au quotidien pour donner vie à vos projets.
+            {t('skills_subtitle')}
           </motion.p>
         </div>
 
@@ -127,28 +170,37 @@ export default function Skills() {
 
               {/* Liste des compétences */}
               <div className="space-y-4">
-                {category.skills.map((skill, sIndex) => (
-                  <div key={sIndex} className="space-y-2">
-                    <div className="flex justify-between items-center text-sm font-medium">
-                      <span className="text-slate-700 dark:text-slate-350">{skill.name}</span>
-                      <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200/30 dark:border-slate-800">
-                        {skill.level}
-                      </span>
+                {category.skills.map((skill, sIndex) => {
+                  const getSkillLevelTranslation = (lvl: string) => {
+                    const l = lvl.toLowerCase();
+                    if (l === 'expert' || l === 'خبير') return t('skills_expert');
+                    if (l === 'avancé' || l === 'advanced' || l === 'متقدم') return t('skills_advanced');
+                    return t('skills_intermediate');
+                  };
+                  
+                  return (
+                    <div key={sIndex} className="space-y-2">
+                      <div className="flex justify-between items-center text-sm font-medium">
+                        <span className="text-slate-700 dark:text-slate-350">{skill.name}</span>
+                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200/30 dark:border-slate-800">
+                          {getSkillLevelTranslation(skill.level)}
+                        </span>
+                      </div>
+                      {/* Barre de niveau factice mais stylisée */}
+                      <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          whileInView={{ 
+                            width: skill.level === 'Expert' || skill.level === 'خبير' ? '95%' : skill.level === 'Avancé' || skill.level === 'Advanced' || skill.level === 'متقدم' ? '80%' : '60%' 
+                          }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.2, duration: 1, ease: 'easeOut' }}
+                          className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 rounded-full"
+                        />
+                      </div>
                     </div>
-                    {/* Barre de niveau factice mais stylisée */}
-                    <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        whileInView={{ 
-                          width: skill.level === 'Expert' ? '95%' : skill.level === 'Avancé' ? '80%' : '60%' 
-                        }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.2, duration: 1, ease: 'easeOut' }}
-                        className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 rounded-full"
-                      />
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </motion.div>
           ))}

@@ -20,36 +20,37 @@ const skillsData = {
       iconName: "Server",
       skills: [
         { name: "Java / Spring Boot", level: "Expert" },
-        { name: "Node.js / NestJS", level: "Avancé" },
-        { name: "PHP / Symfony", level: "Avancé" }
+        { name: "Python (Django / FastAPI / Flask)", level: "Avancé" },
+        { name: "PHP / Symfony 6", level: "Avancé" }
       ]
     },
     {
-      title: "Frontend",
+      title: "Frontend & Mobile",
       iconName: "Laptop",
       skills: [
-        { name: "React / Next.js", level: "Expert" },
-        { name: "Angular", level: "Avancé" },
-        { name: "HTML / CSS / Tailwind", level: "Expert" }
+        { name: "React.js / React Native", level: "Expert" },
+        { name: "Angular 16", level: "Avancé" },
+        { name: "Flutter", level: "Avancé" },
+        { name: "HTML5 / CSS3 / JavaScript / TypeScript", level: "Expert" }
       ]
     },
     {
-      title: "Bases de données",
+      title: "Bases de Données & IA",
       iconName: "Database",
       skills: [
-        { name: "MySQL / SQL Server", level: "Expert" },
-        { name: "Oracle", level: "Avancé" },
-        { name: "MongoDB", level: "Intermédiaire" }
+        { name: "MySQL / PostgreSQL", level: "Expert" },
+        { name: "SQL Server", level: "Avancé" },
+        { name: "Scikit-learn / Machine Learning", level: "Intermédiaire" }
       ]
     },
     {
-      title: "Outils & Architecture",
+      title: "Outils & Méthodologies",
       iconName: "Wrench",
       skills: [
         { name: "Git / GitHub", level: "Expert" },
-        { name: "API REST / GraphQL", level: "Expert" },
-        { name: "Microservices", level: "Avancé" },
-        { name: "Méthode Scrum Agile", level: "Expert" }
+        { name: "API REST / JWT + OAuth2", level: "Expert" },
+        { name: "Postman / Stripe API", level: "Avancé" },
+        { name: "Agilité / Résolution de problèmes", level: "Expert" }
       ]
     }
   ]

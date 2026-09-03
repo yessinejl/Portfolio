@@ -21,8 +21,8 @@ const profile = {
   location: "Cité Khalil, La Marsa, Tunis",
   github_url: "https://github.com/Yassinejlassia",
   linkedin_url: "https://linkedin.com/in/Yassinejlassia",
-  about: "Développeur Full-Stack passionné, spécialisé dans la conception d'applications web et de systèmes d'information intelligents. Avec une double casquette Frontend (React, Angular) et Backend (Spring Boot, Django), j'aime concevoir des architectures robustes et résoudre des problèmes complexes pour créer des expériences utilisateur intuitives.",
-  photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&h=256&auto=format&fit=crop"
+  about: "Étudiant en Licence Développement des Systèmes d'Information à l'ISET Médenine et Développeur Full-Stack passionné. Fort d'expériences concrètes avec Java/Spring Boot, Angular, React/React Native, Python (Django/Flask), Flutter et Symfony, je suis spécialisé dans la conception d'applications web et mobiles modernes, intelligentes et robustes.",
+  photoUrl: "/profile.webp"
 };
 
 async function seed() {

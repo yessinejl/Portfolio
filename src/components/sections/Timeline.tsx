@@ -6,8 +6,10 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { TimelineItem } from '@/types/timeline';
 import { Briefcase, GraduationCap, Calendar } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function Timeline() {
+  const { t } = useLanguage();
   const [items, setItems] = useState<TimelineItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,6 +32,17 @@ export default function Timeline() {
 
   if (loading || items.length === 0) return null;
 
+  const getOrgName = (org: string) => {
+    if (org === 'Projet Académique' || org.toLowerCase() === 'academic project') {
+      return t('timeline_academic');
+    }
+    return org;
+  };
+
+  const getPeriodText = (period: string) => {
+    return period.replace(/Présent|Present/gi, t('timeline_present'));
+  };
+
   return (
     <section id="experience" className="py-20 bg-white dark:bg-slate-950 transition-colors duration-300">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,7 +54,7 @@ export default function Timeline() {
             viewport={{ once: true }}
             className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white"
           >
-            Expériences & Formations
+            {t('timeline_title')}
           </motion.h2>
           <motion.div 
             initial={{ scaleX: 0 }}
@@ -51,14 +64,14 @@ export default function Timeline() {
           />
         </div>
 
-        <div className="relative ml-4 md:ml-8 mt-8">
+        <div className="relative ml-4 md:ml-8 rtl:ml-0 rtl:mr-4 rtl:md:mr-8 mt-8">
           {/* Ligne verticale de la timeline animée sur scroll */}
           <motion.div 
             initial={{ height: 0 }}
             whileInView={{ height: '100%' }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1.2, ease: 'easeInOut' }}
-            className="absolute left-0 top-0 w-0.5 bg-gradient-to-b from-blue-600 via-indigo-500 to-slate-200 dark:to-slate-850 origin-top"
+            className="absolute left-0 rtl:left-auto rtl:right-0 top-0 w-0.5 bg-gradient-to-b from-blue-600 via-indigo-500 to-slate-200 dark:to-slate-850 origin-top"
           />
 
           <div className="space-y-12">
@@ -76,10 +89,10 @@ export default function Timeline() {
                     duration: 0.6,
                     delay: Math.min(index * 0.1, 0.4) 
                   }}
-                  className="relative pl-8 md:pl-12 group"
+                  className="relative pl-8 md:pl-12 rtl:pl-0 rtl:pr-8 rtl:md:pl-0 rtl:md:pr-12 group"
                 >
                   {/* Point central avec icône */}
-                  <div className="absolute -left-[21px] top-0 w-10 h-10 rounded-full border-4 border-white dark:border-slate-950 flex items-center justify-center z-10 shadow-sm bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                  <div className="absolute -left-[21px] rtl:-left-auto rtl:-right-[21px] top-0 w-10 h-10 rounded-full border-4 border-white dark:border-slate-950 flex items-center justify-center z-10 shadow-sm bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
                     {item.type === 'experience' ? <Briefcase className="w-4 h-4" /> : <GraduationCap className="w-4 h-4" />}
                   </div>
 
@@ -95,18 +108,18 @@ export default function Timeline() {
                         {item.organization && (
                           <span className="flex items-center gap-1.5 text-slate-800 dark:text-white font-bold text-sm px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-sm">
                             {item.type === 'experience' ? <Briefcase className="w-4 h-4 text-blue-500" /> : <GraduationCap className="w-4 h-4 text-purple-500" />}
-                            {item.organization}
+                            {getOrgName(item.organization)}
                           </span>
                         )}
                         {/* Période */}
                         <span className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20 px-2.5 py-1 rounded-md">
                           <Calendar className="w-3.5 h-3.5" />
-                          {item.period}
+                          {getPeriodText(item.period)}
                         </span>
                       </div>
 
                       {item.description && (
-                        <div className="text-slate-600 dark:text-slate-400 text-sm whitespace-pre-wrap leading-relaxed mb-4">
+                        <div className="text-slate-650 dark:text-slate-400 text-sm whitespace-pre-wrap leading-relaxed mb-4">
                           {item.description}
                         </div>
                       )}

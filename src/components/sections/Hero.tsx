@@ -3,12 +3,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useProfile } from '@/context/ProfileContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { FaGithub, FaLinkedin, FaFileArrowDown, FaReact, FaNodeJs } from 'react-icons/fa6';
 import { ArrowRight, Mail } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
 
 export default function Hero() {
   const { profile } = useProfile();
+  const { t, language } = useLanguage();
 
   // Définition des variantes d'animation
   const containerVariants = {
@@ -106,7 +108,7 @@ export default function Hero() {
         className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center"
       >
         {/* Colonne Gauche : Contenu Texte */}
-        <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 sm:space-y-8">
+        <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left rtl:lg:text-right space-y-6 sm:space-y-8">
           
           {/* Badge Intro */}
           <motion.div 
@@ -117,7 +119,7 @@ export default function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
             </span>
-            Disponible pour de nouvelles opportunités
+            {t('hero_availability')}
           </motion.div>
 
           {/* Titre principal */}
@@ -125,7 +127,7 @@ export default function Hero() {
             variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight text-slate-900 dark:text-white"
           >
-            Bonjour, je suis{' '}
+            {t('hero_hello')}{' '}
             <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
               {profile?.name || 'Yassine Jlassia'}
             </span>
@@ -134,17 +136,18 @@ export default function Hero() {
           {/* Animation Pro - TypeAnimation */}
           <motion.div 
             variants={itemVariants}
-            className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-700 dark:text-slate-350 h-10 sm:h-12 flex items-center justify-center lg:justify-start"
+            className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-700 dark:text-slate-350 h-10 sm:h-12 flex items-center justify-center lg:justify-start rtl:lg:justify-end"
           >
             <TypeAnimation
+              key={language}
               sequence={[
-                profile?.title || 'Développeur Web',
+                profile?.title || t('hero_title_dev'),
                 2000,
-                "Créateur d'expériences",
+                t('hero_title_creator'),
                 2000,
-                'Passionné de code',
+                t('hero_title_enthusiast'),
                 2000,
-                'Problem Solver',
+                t('hero_title_problem'),
                 2000,
               ]}
               wrapper="span"
@@ -157,9 +160,9 @@ export default function Hero() {
           {/* Sous-titre descriptif */}
           <motion.p 
             variants={itemVariants}
-            className="text-base sm:text-lg md:text-xl text-slate-655 dark:text-slate-400 max-w-xl leading-relaxed mt-2"
+            className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed mt-2"
           >
-            Je conçois et développe des applications web modernes, performantes et centrées sur l'expérience utilisateur. Spécialisé en React, Next.js, et Supabase.
+            {t('hero_description')}
           </motion.p>
 
           {/* Boutons d'action (CTA) */}
@@ -171,15 +174,17 @@ export default function Hero() {
               href="#projects"
               className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transform hover:-translate-y-0.5 transition-all duration-200"
             >
-              Voir mes projets
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              {t('hero_projects_cta')}
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
             </a>
             <a
-              href="/cv.pdf"
+              href={profile?.cvUrl || "/cv.pdf"}
               download
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-slate-200 dark:border-slate-850 bg-white/60 dark:bg-slate-900/50 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-250 font-semibold hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200"
             >
-              Télécharger mon CV
+              {t('hero_cv_cta')}
               <FaFileArrowDown className="w-4.5 h-4.5 text-slate-500 dark:text-slate-400" />
             </a>
           </motion.div>

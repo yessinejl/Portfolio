@@ -9,7 +9,10 @@ import { FaGithub } from 'react-icons/fa6';
 import { ArrowRight, Code, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
+import { useLanguage } from '@/context/LanguageContext';
+
 export default function Projects() {
+  const { t } = useLanguage();
   const [projects, setProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -80,7 +83,7 @@ export default function Projects() {
             transition={{ duration: 0.5 }}
             className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white"
           >
-            Mes Projets Récents
+            {t('projects_title')}
           </motion.h2>
           <motion.div 
             initial={{ scaleX: 0 }}
@@ -96,26 +99,38 @@ export default function Projects() {
             transition={{ delay: 0.3, duration: 0.5 }}
             className="mt-4 text-slate-600 dark:text-slate-400 text-lg"
           >
-            Une sélection d'applications sur lesquelles j'ai travaillé, lues dynamiquement depuis la base de données.
+            {t('projects_subtitle')}
           </motion.p>
         </div>
 
         {/* Filtres par Technologie */}
         {!loading && tags.length > 1 && (
           <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
-            {tags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => setSelectedTag(tag)}
-                className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-250 cursor-pointer ${
-                  selectedTag === tag
-                    ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/15'
-                    : 'bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-350 border-slate-200/50 dark:border-slate-800'
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
+            {tags.map((tag) => {
+              const isActive = selectedTag === tag;
+              return (
+                <button
+                  key={tag}
+                  onClick={() => setSelectedTag(tag)}
+                  className={`relative px-4 py-2 rounded-xl text-sm font-medium border transition-colors duration-250 cursor-pointer ${
+                    isActive
+                      ? 'border-blue-600 text-white'
+                      : 'bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-350 border-slate-200/50 dark:border-slate-800'
+                  }`}
+                  style={{ transformStyle: 'preserve-3d' }} // Évite les micro-sauts de rendu 3D
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="activeFilter"
+                      className="absolute inset-0 bg-blue-600 rounded-xl shadow-md shadow-blue-500/15"
+                      style={{ originY: '0px', zIndex: -1 }}
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{tag === 'Tous' ? t('projects_all_tags') : tag}</span>
+                </button>
+              );
+            })}
           </div>
         )}
 
@@ -147,10 +162,10 @@ export default function Projects() {
           <div className="text-center py-16 px-4 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/10">
             <Code className="w-12 h-12 text-slate-400 dark:text-slate-600 mx-auto mb-4" />
             <p className="text-slate-650 dark:text-slate-400 font-semibold mb-2">
-              Aucun projet disponible pour le moment.
+              {t('projects_none')}
             </p>
             <p className="text-slate-500 dark:text-slate-500 text-sm">
-              Veuillez vous connecter à l'espace administration pour en ajouter de nouveaux.
+              {t('projects_none_admin')}
             </p>
           </div>
         ) : (
@@ -224,8 +239,8 @@ export default function Projects() {
                         href={`/projects/${project.id}`}
                         className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                       >
-                        En savoir plus
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        {t('projects_learn_more')}
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
                       </Link>
 
                       <div className="flex items-center space-x-3">

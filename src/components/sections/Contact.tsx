@@ -11,19 +11,27 @@ import { useProfile } from '@/context/ProfileContext';
 import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa6';
 
-// Définition du schéma de validation Zod
-const contactSchema = z.object({
-  name: z.string().min(2, 'Le nom doit contenir au moins 2 caractères.'),
-  email: z.string().email('Adresse email invalide.'),
-  message: z.string().min(10, 'Le message doit faire au moins 10 caractères.'),
-});
+import { useLanguage } from '@/context/LanguageContext';
 
-type ContactFormData = z.infer<typeof contactSchema>;
+// Typage des données de formulaire
+interface ContactFormData {
+  name: string;
+  email: string;
+  message: string;
+}
 
 export default function Contact() {
   const { profile } = useProfile();
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
+
+  // Schéma dynamique selon la langue
+  const contactSchema = z.object({
+    name: z.string().min(2, t('contact_error_name_min')),
+    email: z.string().email(t('contact_error_email_invalid')),
+    message: z.string().min(10, t('contact_error_msg_min')),
+  });
 
   const {
     register,
@@ -47,6 +55,23 @@ export default function Contact() {
         created_at: new Date().toISOString()
       });
 
+      // Envoi de la notification e-mail
+      try {
+        await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: data.name,
+            email: data.email,
+            message: data.message,
+          }),
+        });
+      } catch (emailErr) {
+        console.error('Erreur lors de l\'envoi de la notification e-mail :', emailErr);
+      }
+
       setSubmitStatus('success');
       reset();
     } catch (err) {
@@ -55,9 +80,7 @@ export default function Contact() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  return (
+  };  return (
     <section id="contact" className="py-20 bg-slate-50/50 dark:bg-slate-900/10 transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -70,7 +93,7 @@ export default function Contact() {
             transition={{ duration: 0.5 }}
             className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white"
           >
-            Me Contacter
+            {t('contact_title')}
           </motion.h2>
           <motion.div 
             initial={{ scaleX: 0 }}
@@ -86,7 +109,7 @@ export default function Contact() {
             transition={{ delay: 0.3, duration: 0.5 }}
             className="mt-4 text-slate-600 dark:text-slate-400 text-lg"
           >
-            Un projet en tête ou simplement envie de discuter ? N'hésitez pas à m'envoyer un message.
+            {t('contact_subtitle')}
           </motion.p>
         </div>
 
@@ -102,7 +125,7 @@ export default function Contact() {
           >
             <div className="p-6 sm:p-8 rounded-2xl border border-slate-200/60 dark:border-slate-800 bg-white/70 dark:bg-slate-950/70 backdrop-blur-sm shadow-sm space-y-6">
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                Coordonnées
+                {t('contact_coordinates')}
               </h3>
               
               <div className="space-y-4">
@@ -111,7 +134,7 @@ export default function Contact() {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="block text-xs text-slate-400 dark:text-slate-500 font-medium">Email</span>
+                    <span className="block text-xs text-slate-400 dark:text-slate-500 font-medium">{t('contact_email')}</span>
                     <a href={`mailto:${profile?.email || 'yacinejlassia@gmail.com'}`} className="text-sm font-semibold hover:underline">
                       {profile?.email || 'yacinejlassia@gmail.com'}
                     </a>
@@ -123,7 +146,7 @@ export default function Contact() {
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="block text-xs text-slate-400 dark:text-slate-500 font-medium">Téléphone</span>
+                    <span className="block text-xs text-slate-400 dark:text-slate-500 font-medium">{t('contact_phone')}</span>
                     <span className="text-sm font-semibold">{profile?.phone || '+216 92531951'}</span>
                   </div>
                 </div>
@@ -133,7 +156,7 @@ export default function Contact() {
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="block text-xs text-slate-400 dark:text-slate-500 font-medium">Localisation</span>
+                    <span className="block text-xs text-slate-400 dark:text-slate-500 font-medium">{t('contact_location')}</span>
                     <span className="text-sm font-semibold">{profile?.location || 'Cité Khalil, La Marsa, Tunis'}</span>
                   </div>
                 </div>
@@ -142,7 +165,7 @@ export default function Contact() {
               {/* Réseaux sociaux */}
               <div className="pt-6 border-t border-slate-150 dark:border-slate-900 space-y-3">
                 <span className="block text-xs text-slate-400 dark:text-slate-500 font-medium uppercase tracking-wider">
-                  Suivez-moi
+                  {t('contact_follow')}
                 </span>
                 <div className="flex gap-4">
                   <a
@@ -179,13 +202,13 @@ export default function Contact() {
               className="p-6 sm:p-8 rounded-2xl border border-slate-200/60 dark:border-slate-800 bg-white/70 dark:bg-slate-950/70 backdrop-blur-sm shadow-sm space-y-5"
             >
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">
-                Envoyer un message
+                {t('contact_send_msg')}
               </h3>
 
               {/* Nom */}
               <div className="space-y-1.5">
                 <label htmlFor="name" className="block text-sm font-semibold text-slate-700 dark:text-slate-350">
-                  Nom Complet
+                  {t('contact_fullname')}
                 </label>
                 <input
                   type="text"
@@ -196,7 +219,7 @@ export default function Contact() {
                       ? 'border-red-500 focus:ring-red-500/20' 
                       : 'border-slate-200 dark:border-slate-800 focus:ring-blue-500/20 focus:border-blue-500'
                   }`}
-                  placeholder="Ex: Jean Dupont"
+                  placeholder={t('contact_fullname_placeholder')}
                 />
                 {errors.name && (
                   <p className="text-xs text-red-500 flex items-center gap-1">
@@ -209,7 +232,7 @@ export default function Contact() {
               {/* Email */}
               <div className="space-y-1.5">
                 <label htmlFor="email" className="block text-sm font-semibold text-slate-700 dark:text-slate-350">
-                  Adresse Email
+                  {t('contact_email_label')}
                 </label>
                 <input
                   type="email"
@@ -220,7 +243,7 @@ export default function Contact() {
                       ? 'border-red-500 focus:ring-red-500/20' 
                       : 'border-slate-200 dark:border-slate-800 focus:ring-blue-500/20 focus:border-blue-500'
                   }`}
-                  placeholder="Ex: jean.dupont@email.com"
+                  placeholder={t('contact_email_placeholder')}
                 />
                 {errors.email && (
                   <p className="text-xs text-red-500 flex items-center gap-1">
@@ -233,7 +256,7 @@ export default function Contact() {
               {/* Message */}
               <div className="space-y-1.5">
                 <label htmlFor="message" className="block text-sm font-semibold text-slate-700 dark:text-slate-350">
-                  Votre Message
+                  {t('contact_message_label')}
                 </label>
                 <textarea
                   id="message"
@@ -244,7 +267,7 @@ export default function Contact() {
                       ? 'border-red-500 focus:ring-red-500/20' 
                       : 'border-slate-200 dark:border-slate-800 focus:ring-blue-500/20 focus:border-blue-500'
                   }`}
-                  placeholder="Expliquez brièvement votre projet ou votre demande..."
+                  placeholder={t('contact_message_placeholder')}
                 />
                 {errors.message && (
                   <p className="text-xs text-red-500 flex items-center gap-1">
@@ -259,8 +282,8 @@ export default function Contact() {
                 <div className="p-4 rounded-xl bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900/30 text-green-700 dark:text-green-400 text-sm flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" />
                   <div>
-                    <span className="block font-bold">Message envoyé avec succès !</span>
-                    Merci pour votre message. Je vous répondrai dans les plus brefs délais.
+                    <span className="block font-bold">{t('contact_success_title')}</span>
+                    {t('contact_success_desc')}
                   </div>
                 </div>
               )}
@@ -270,8 +293,8 @@ export default function Contact() {
                 <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 text-red-700 dark:text-red-400 text-sm flex items-start gap-3">
                   <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
                   <div>
-                    <span className="block font-bold">Erreur lors de l'envoi</span>
-                    Une erreur s'est produite lors de l'insertion en base de données. Veuillez réessayer ou utiliser l'adresse e-mail directe.
+                    <span className="block font-bold">{t('contact_error_title')}</span>
+                    {t('contact_error_desc')}
                   </div>
                 </div>
               )}
@@ -283,11 +306,11 @@ export default function Contact() {
                 className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/60 text-white font-medium shadow-md shadow-blue-500/10 hover:shadow-lg transition-all duration-200 cursor-pointer disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
-                  <>Envoi en cours...</>
+                  <>{t('contact_submitting')}</>
                 ) : (
                   <>
-                    Envoyer le message
-                    <Send className="w-4 h-4" />
+                    {t('contact_submit_btn')}
+                    <Send className="w-4 h-4 rtl:-scale-x-100" />
                   </>
                 )}
               </button>
