@@ -195,83 +195,89 @@ export default function Projects() {
                       layout: { duration: 0.3 }
                     }}
                     key={project.id}
-                    className="group flex flex-col h-full rounded-2xl border border-slate-200/60 dark:border-slate-800 bg-white/70 dark:bg-slate-950/70 backdrop-blur-sm overflow-hidden hover:border-slate-350 dark:hover:border-slate-700/80 shadow-sm hover:shadow-lg transition-all duration-300"
+                    className="group flex flex-col h-full rounded-2xl border border-slate-200/60 dark:border-slate-800/80 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md overflow-hidden hover:border-blue-500/50 dark:hover:border-blue-500/50 shadow-sm hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 relative"
                   >
-                  {/* Visuel du projet */}
-                  <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
-                    {project.image_url ? (
-                      <img
-                        src={project.image_url}
-                        alt={project.title}
-                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="flex items-center justify-center h-full w-full text-slate-450 dark:text-slate-600 bg-slate-100 dark:bg-slate-900">
-                        <Code className="w-12 h-12" />
+                    {/* Ligne d'accent supérieure dégradée épurée */}
+                    <div className="h-1 w-full bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 opacity-80 group-hover:opacity-100 transition-opacity" />
+
+                    {/* Corps de la carte épurée */}
+                    <div className="flex flex-col flex-grow p-6">
+                      
+                      {/* En-tête : Icône + Badge Featured + Liens */}
+                      <div className="flex items-center justify-between gap-2 mb-4">
+                        <div className="flex items-center gap-2">
+                          <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                            <Code className="w-4 h-4" />
+                          </div>
+                          {project.featured && (
+                            <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                              Projet Phare
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center space-x-1.5">
+                          {project.github_url && (
+                            <a
+                              href={project.github_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-xl text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+                              aria-label="Code source sur GitHub"
+                            >
+                              <FaGithub className="w-4 h-4" />
+                            </a>
+                          )}
+                          {project.demo_url && (
+                            <a
+                              href={project.demo_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-xl text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+                              aria-label="Démo live"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                          )}
+                        </div>
                       </div>
-                    )}
-                  </div>
 
-                  {/* Corps de la carte */}
-                  <div className="flex flex-col flex-grow p-6">
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3 flex-grow">
-                      {project.description}
-                    </p>
+                      {/* Titre & Description */}
+                      <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {project.title}
+                      </h3>
+                      
+                      <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3 leading-relaxed flex-grow">
+                        {project.description}
+                      </p>
 
-                    {/* Liste des tags */}
-                    <div className="flex flex-wrap gap-1.5 mb-6">
-                      {project.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-450 font-medium"
+                      {/* Liste des tags sous forme de badges épurés */}
+                      <div className="flex flex-wrap gap-1.5 mb-6">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-xs px-2.5 py-1 rounded-lg bg-slate-100/80 dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium border border-slate-200/50 dark:border-slate-800"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Bouton d'action "En savoir plus" */}
+                      <div className="pt-4 border-t border-slate-150 dark:border-slate-900 mt-auto">
+                        <Link
+                          href={`/projects/${project.id}`}
+                          className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors"
                         >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Liens et CTA */}
-                    <div className="flex items-center justify-between border-t border-slate-150 dark:border-slate-900 pt-4 mt-auto">
-                      <Link
-                        href={`/projects/${project.id}`}
-                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
-                      >
-                        {t('projects_learn_more')}
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
-                      </Link>
-
-                      <div className="flex items-center space-x-3">
-                        {project.github_url && (
-                          <a
-                            href={project.github_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
-                            aria-label="Code source sur GitHub"
-                          >
-                            <FaGithub className="w-5 h-5" />
-                          </a>
-                        )}
-                        {project.demo_url && (
-                          <a
-                            href={project.demo_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
-                            aria-label="Démo live"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        )}
+                          {t('projects_learn_more')}
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
+                        </Link>
                       </div>
+
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </motion.div>
           </motion.div>
         )}

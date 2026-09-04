@@ -103,32 +103,55 @@ export default function ProjectDetail() {
         {/* Colonne Gauche : Galerie d'images et Description */}
         <div className="lg:col-span-2 space-y-8">
           
-          {/* Galerie d'images interactive */}
-          <div className="space-y-4">
-            <div className="relative h-64 sm:h-96 w-full rounded-2xl overflow-hidden border border-slate-200/50 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
-              <img
-                src={activeImage}
-                alt={project.title}
-                className="w-full h-full object-cover transition-all duration-300"
-              />
+          {/* Visuel ou Carte technique épurée */}
+          {project.image_url ? (
+            <div className="space-y-4">
+              <div className="relative h-64 sm:h-96 w-full rounded-2xl overflow-hidden border border-slate-200/50 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
+                <img
+                  src={activeImage}
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-all duration-300"
+                />
+              </div>
+              {gallery.length > 1 && (
+                <div className="flex flex-wrap gap-3">
+                  {gallery.map((imgUrl, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveImage(imgUrl)}
+                      className={`w-20 h-16 rounded-xl overflow-hidden border-2 transition-all duration-200 cursor-pointer ${
+                        activeImage === imgUrl 
+                          ? 'border-blue-600 dark:border-blue-500 scale-102 shadow-sm' 
+                          : 'border-transparent opacity-70 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={imgUrl} alt="Vignette" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-            {/* Vignettes */}
-            <div className="flex flex-wrap gap-3">
-              {gallery.map((imgUrl, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveImage(imgUrl)}
-                  className={`w-20 h-16 rounded-xl overflow-hidden border-2 transition-all duration-200 cursor-pointer ${
-                    activeImage === imgUrl 
-                      ? 'border-blue-600 dark:border-blue-500 scale-102 shadow-sm' 
-                      : 'border-transparent opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  <img src={imgUrl} alt="Vignette" className="w-full h-full object-cover" />
-                </button>
-              ))}
+          ) : (
+            <div className="relative p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md overflow-hidden shadow-sm">
+              <div className="h-1 w-full absolute top-0 left-0 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+                  <Code className="w-6 h-6" />
+                </div>
+                <div>
+                  <span className="text-xs uppercase font-bold tracking-widest text-blue-600 dark:text-blue-400">
+                    Fiche du projet
+                  </span>
+                  <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
+                    {project.title}
+                  </h2>
+                </div>
+              </div>
+              <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-base">
+                {project.description}
+              </p>
             </div>
-          </div>
+          )}
 
           {/* Description détaillée */}
           <div className="space-y-4">
