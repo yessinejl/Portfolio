@@ -122,10 +122,10 @@ export default function Navbar() {
                 href="/" 
                 className="flex items-center gap-2 group"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 p-[2px] shadow-sm group-hover:scale-105 transition-transform">
+                <div className="w-8.5 h-8.5 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 p-[2px] shadow-sm group-hover:scale-105 transition-transform">
                   <div className="w-full h-full bg-white dark:bg-slate-950 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-black bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
-                      {(profile?.name || 'Yassine Jlassia').charAt(0)}
+                    <span className="text-[11px] font-black bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent tracking-tighter">
+                      {profile?.name ? profile.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'YJ'}
                     </span>
                   </div>
                 </div>
