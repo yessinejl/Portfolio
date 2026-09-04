@@ -103,8 +103,8 @@ export default function ProjectDetail() {
         {/* Colonne Gauche : Galerie d'images et Description */}
         <div className="lg:col-span-2 space-y-8">
           
-          {/* Visuel ou Carte technique épurée */}
-          {project.image_url ? (
+          {/* Visuel du projet si disponible */}
+          {project.image_url && (
             <div className="space-y-4">
               <div className="relative h-64 sm:h-96 w-full rounded-2xl overflow-hidden border border-slate-200/50 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
                 <img
@@ -131,42 +131,47 @@ export default function ProjectDetail() {
                 </div>
               )}
             </div>
-          ) : (
-            <div className="relative p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md overflow-hidden shadow-sm">
+          )}
+
+          {/* En-tête du projet (titre & résumé) sans image */}
+          {!project.image_url && (
+            <div className="relative p-6 sm:p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md overflow-hidden shadow-sm">
               <div className="h-1 w-full absolute top-0 left-0 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600" />
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
-                  <Code className="w-6 h-6" />
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+                  <Code className="w-5 h-5" />
                 </div>
-                <div>
-                  <span className="text-xs uppercase font-bold tracking-widest text-blue-600 dark:text-blue-400">
-                    Fiche du projet
-                  </span>
-                  <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
-                    {project.title}
-                  </h2>
-                </div>
+                <span className="text-xs uppercase font-bold tracking-widest text-blue-600 dark:text-blue-400">
+                  Fiche Technique
+                </span>
               </div>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-base">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">
+                {project.title}
+              </h1>
+              <p className="text-slate-600 dark:text-slate-350 leading-relaxed text-base sm:text-lg">
                 {project.description}
               </p>
             </div>
           )}
 
-          {/* Description détaillée */}
-          <div className="space-y-4">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
-              {project.title}
-            </h1>
-            <div className="prose prose-slate dark:prose-invert max-w-none text-slate-700 dark:text-slate-350 leading-relaxed text-base">
+          {/* En-tête du projet (titre & résumé) si image présente */}
+          {project.image_url && (
+            <div className="space-y-3">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+                {project.title}
+              </h1>
               <p className="font-semibold text-lg text-slate-800 dark:text-slate-200">
                 {project.description}
               </p>
-              <div className="h-px bg-slate-150 dark:bg-slate-900 my-6" />
-              <p>
-                {project.content || t('proj_detail_default_content')}
-              </p>
             </div>
+          )}
+
+          {/* Contenu détaillé du projet */}
+          <div className="prose prose-slate dark:prose-invert max-w-none text-slate-700 dark:text-slate-350 leading-relaxed text-base">
+            <div className="h-px bg-slate-150 dark:bg-slate-900 mb-6" />
+            <p className="whitespace-pre-line">
+              {project.content || t('proj_detail_default_content')}
+            </p>
           </div>
         </div>
 
