@@ -1,4 +1,5 @@
 import Hero from "@/components/sections/Hero";
+import StatsBanner from "@/components/sections/StatsBanner";
 import About from "@/components/sections/About";
 import Skills from "@/components/sections/Skills";
 import Timeline from "@/components/sections/Timeline";
@@ -11,6 +12,7 @@ export default function Home() {
     <SpotlightWrapper>
       <div className="flex flex-col min-h-screen">
         <Hero />
+        <StatsBanner />
         <About />
         <Skills />
         <Timeline />
