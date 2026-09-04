@@ -14,48 +14,69 @@ interface StatItem {
   labelFr: string;
   labelEn: string;
   labelAr: string;
+  gradient: string;
+  glow: string;
+  borderGlow: string;
 }
 
 const statsData: StatItem[] = [
   {
     id: 'projects',
-    icon: <FolderGit2 className="w-6 h-6 text-blue-500" />,
+    icon: <FolderGit2 className="w-6 h-6" />,
     number: 5,
     suffix: '+',
-    labelFr: 'Projets Majeurs Réalisés',
-    labelEn: 'Major Projects Delivered',
-    labelAr: 'مشاريع رئيسية مكتملة',
+    labelFr: 'Projets Complexes',
+    labelEn: 'Complex Projects',
+    labelAr: 'مشاريع معقدة',
+    gradient: 'from-blue-500 to-blue-700',
+    glow: 'rgba(59,130,246,0.35)',
+    borderGlow: 'rgba(59,130,246,0.2)',
   },
   {
     id: 'technologies',
-    icon: <Code2 className="w-6 h-6 text-indigo-500" />,
+    icon: <Code2 className="w-6 h-6" />,
     number: 10,
     suffix: '+',
-    labelFr: 'Technologies & Frameworks',
-    labelEn: 'Technologies & Frameworks',
-    labelAr: 'تقنيات وأطر عمل',
+    labelFr: 'Technologies Maîtrisées',
+    labelEn: 'Technologies Mastered',
+    labelAr: 'تقنيات متقنة',
+    gradient: 'from-indigo-500 to-violet-600',
+    glow: 'rgba(99,102,241,0.35)',
+    borderGlow: 'rgba(99,102,241,0.2)',
   },
   {
     id: 'quality',
-    icon: <Sparkles className="w-6 h-6 text-purple-500" />,
+    icon: <Sparkles className="w-6 h-6" />,
     number: 100,
     suffix: '%',
-    labelFr: 'Code Propre & Architecture',
-    labelEn: 'Clean Architecture & Code',
-    labelAr: 'كود نظيف وبنية متطورة',
+    labelFr: 'Code Propre & Structuré',
+    labelEn: 'Clean & Structured Code',
+    labelAr: 'كود نظيف ومنظم',
+    gradient: 'from-purple-500 to-pink-600',
+    glow: 'rgba(168,85,247,0.35)',
+    borderGlow: 'rgba(168,85,247,0.2)',
   },
   {
     id: 'languages',
-    icon: <Languages className="w-6 h-6 text-emerald-500" />,
+    icon: <Languages className="w-6 h-6" />,
     number: 3,
     suffix: '',
-    labelFr: 'Langues (FR, EN, AR)',
-    labelEn: 'Languages (FR, EN, AR)',
-    labelAr: 'لغات (فرنسية، إنجليزية، عربية)',
+    labelFr: 'Langues Maîtrisées',
+    labelEn: 'Languages Spoken',
+    labelAr: 'لغات متقنة',
+    gradient: 'from-emerald-500 to-teal-600',
+    glow: 'rgba(16,185,129,0.35)',
+    borderGlow: 'rgba(16,185,129,0.2)',
   },
 ];
 
-function AnimatedCounter({ value, duration = 1.8 }: { value: number; duration?: number }) {
+function AnimatedCounter({
+  value,
+  duration = 2.0,
+}: {
+  value: number;
+  duration?: number;
+}) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
@@ -63,100 +84,143 @@ function AnimatedCounter({ value, duration = 1.8 }: { value: number; duration?: 
   useEffect(() => {
     if (!isInView) return;
 
-    let start = 0;
-    const steps = 40;
-    const increment = value / steps;
-    const stepTime = (duration * 1000) / steps;
+    let startTime: number | null = null;
 
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= value) {
-        setCount(value);
-        clearInterval(timer);
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / (duration * 1000), 1);
+      // Ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * value));
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
       } else {
-        setCount(Math.floor(start));
+        setCount(value);
       }
-    }, stepTime);
+    };
 
-    return () => clearInterval(timer);
+    requestAnimationFrame(step);
   }, [isInView, value, duration]);
 
   return <span ref={ref}>{count}</span>;
 }
 
-export default function StatsBanner() {
+function StatCard({ item, index }: { item: StatItem; index: number }) {
   const { language } = useLanguage();
+  const [hovered, setHovered] = useState(false);
 
-  const getLabel = (item: StatItem) => {
+  const getLabel = () => {
     if (language === 'en') return item.labelEn;
     if (language === 'ar') return item.labelAr;
     return item.labelFr;
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.12,
-      },
-    },
-  } as const;
-
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.9, y: 20 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: { type: 'spring', stiffness: 100, damping: 15 },
-    },
-  } as const;
-
   return (
-    <section className="py-10 bg-transparent transition-colors duration-300 relative z-10">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-          className="p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl shadow-xl shadow-slate-900/5 dark:shadow-blue-500/5"
+    <motion.div
+      initial={{ opacity: 0, y: 40, scale: 0.88 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{
+        duration: 0.55,
+        delay: index * 0.1,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      className="relative flex flex-col items-center text-center p-6 sm:p-7 rounded-2xl cursor-default overflow-hidden"
+      style={{
+        background: 'rgba(255,255,255,0.04)',
+        border: `1px solid ${hovered ? item.borderGlow : 'rgba(148,163,184,0.12)'}`,
+        boxShadow: hovered
+          ? `0 0 35px ${item.glow}, 0 8px 30px rgba(0,0,0,0.08)`
+          : '0 2px 12px rgba(0,0,0,0.04)',
+        transition: 'box-shadow 0.35s ease, border-color 0.35s ease',
+      }}
+    >
+      {/* Background glow blob */}
+      <motion.div
+        animate={{ opacity: hovered ? 0.18 : 0 }}
+        transition={{ duration: 0.35 }}
+        className={`absolute inset-0 bg-gradient-to-br ${item.gradient} blur-2xl rounded-2xl`}
+      />
+
+      {/* Top shimmer line */}
+      <motion.div
+        animate={{ scaleX: hovered ? 1 : 0 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${item.gradient} origin-left rounded-t-2xl`}
+      />
+
+      {/* Icon */}
+      <motion.div
+        animate={{ scale: hovered ? 1.12 : 1, rotate: hovered ? 8 : 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        className={`relative z-10 mb-4 p-3.5 rounded-2xl bg-gradient-to-br ${item.gradient} text-white shadow-lg`}
+        style={{ boxShadow: `0 6px 20px ${item.glow}` }}
+      >
+        {item.icon}
+      </motion.div>
+
+      {/* Number */}
+      <div className="relative z-10 flex items-baseline gap-0.5 mb-1.5">
+        <span className="text-4xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white tabular-nums">
+          {item.prefix}
+          <AnimatedCounter value={item.number} duration={1.8 + index * 0.15} />
+        </span>
+        <span
+          className={`text-3xl sm:text-4xl font-black bg-gradient-to-br ${item.gradient} bg-clip-text text-transparent`}
         >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 divide-y sm:divide-y-0 sm:divide-x dark:divide-slate-800/80 divide-slate-200/80 rtl:divide-x-reverse">
-            {statsData.map((item, index) => (
-              <motion.div
-                key={item.id}
-                variants={cardVariants}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className={`flex flex-col items-center text-center group ${
-                  index !== 0 ? 'pt-6 sm:pt-0 sm:px-4' : 'sm:pr-4'
-                }`}
-              >
-                {/* Icône avec effet de halo au survol */}
-                <div className="p-3 rounded-2xl bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/50 dark:border-slate-800/50 mb-3 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 shadow-sm">
-                  {item.icon}
-                </div>
+          {item.suffix}
+        </span>
+      </div>
 
-                {/* Valeur numérique animée */}
-                <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white font-mono flex items-center justify-center">
-                  {item.prefix}
-                  <AnimatedCounter value={item.number} />
-                  <span className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
-                    {item.suffix}
-                  </span>
-                </div>
+      {/* Label */}
+      <p className="relative z-10 text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 leading-snug max-w-[120px]">
+        {getLabel()}
+      </p>
+    </motion.div>
+  );
+}
 
-                {/* Libellé */}
-                <p className="mt-1.5 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-400 tracking-wide">
-                  {getLabel(item)}
-                </p>
-              </motion.div>
-            ))}
+export default function StatsBanner() {
+  return (
+    <section
+      id="stats"
+      className="relative py-8 sm:py-10 bg-transparent transition-colors duration-300 z-10"
+    >
+      {/* Decorative top separator */}
+      <div className="absolute top-0 inset-x-0 flex justify-center pointer-events-none">
+        <div className="w-px h-10 bg-gradient-to-b from-transparent via-blue-400/30 to-transparent" />
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Glass container */}
+        <div
+          className="relative rounded-3xl p-1"
+          style={{
+            background:
+              'linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(168,85,247,0.04) 50%, rgba(59,130,246,0.08) 100%)',
+            border: '1px solid rgba(148,163,184,0.12)',
+          }}
+        >
+          {/* Inner content */}
+          <div
+            className="rounded-[1.4rem] px-4 sm:px-8 py-6 backdrop-blur-2xl bg-white/55 dark:bg-slate-950/60"
+          >
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {statsData.map((item, index) => (
+                <StatCard key={item.id} item={item} index={index} />
+              ))}
+            </div>
           </div>
-        </motion.div>
+        </div>
+      </div>
+
+      {/* Decorative bottom separator */}
+      <div className="absolute bottom-0 inset-x-0 flex justify-center pointer-events-none">
+        <div className="w-px h-10 bg-gradient-to-b from-transparent via-indigo-400/30 to-transparent" />
       </div>
     </section>
   );

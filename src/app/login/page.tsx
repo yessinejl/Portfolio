@@ -17,7 +17,7 @@ export default function Login() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        router.push('/admin');
+        router.push('/fanatics');
       }
     });
     return () => unsubscribe();
@@ -29,7 +29,7 @@ export default function Login() {
     setError(null);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push('/admin');
+      router.push('/fanatics');
       router.refresh();
     } catch (err: any) {
       console.error('Erreur de connexion Auth :', err);

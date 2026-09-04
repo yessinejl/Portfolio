@@ -63,7 +63,11 @@ export type TranslationKeys =
   | 'proj_detail_tech'
   | 'proj_detail_visit'
   | 'proj_detail_source'
-  | 'proj_detail_default_content';
+  | 'proj_detail_default_content'
+  | 'stats_projects'
+  | 'stats_technologies'
+  | 'stats_code_quality'
+  | 'stats_experience';
 
 const translations: Record<Language, Record<TranslationKeys, string>> = {
   fr: {
@@ -126,6 +130,10 @@ const translations: Record<Language, Record<TranslationKeys, string>> = {
     proj_detail_visit: 'Visiter le site',
     proj_detail_source: 'Code source sur GitHub',
     proj_detail_default_content: "Aucun détail supplémentaire n'a été spécifié pour ce projet. Il s'agit d'une démonstration construite avec une architecture propre intégrant les meilleures pratiques du développement web moderne.",
+    stats_projects: 'Projets Complexes',
+    stats_technologies: 'Technologies Maîtrisées',
+    stats_code_quality: 'Code Propre & Structuré',
+    stats_experience: 'Ans d\'Expérience',
   },
   en: {
     nav_home: 'Home',
@@ -187,6 +195,10 @@ const translations: Record<Language, Record<TranslationKeys, string>> = {
     proj_detail_visit: 'Visit Site',
     proj_detail_source: 'Source Code on GitHub',
     proj_detail_default_content: 'No additional details have been specified for this project. It is a clean demonstration built using modern web best practices.',
+    stats_projects: 'Complex Projects',
+    stats_technologies: 'Technologies Mastered',
+    stats_code_quality: 'Clean & Structured Code',
+    stats_experience: 'Years of Experience',
   },
   ar: {
     nav_home: 'الرئيسية',
@@ -248,6 +260,10 @@ const translations: Record<Language, Record<TranslationKeys, string>> = {
     proj_detail_visit: 'زيارة الموقع',
     proj_detail_source: 'كود المصدر على GitHub',
     proj_detail_default_content: 'لم يتم تحديد تفاصيل إضافية لهذا المشروع. هذا عرض توضيحي تم بناؤه بأفضل الممارسات لتطوير الويب الحديث.',
+    stats_projects: 'مشاريع معقدة',
+    stats_technologies: 'تقنيات متقنة',
+    stats_code_quality: 'كود نظيف ومنظم',
+    stats_experience: 'سنوات من الخبرة',
   },
 };
 
