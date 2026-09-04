@@ -103,7 +103,7 @@ export default function StatsBanner() {
         staggerChildren: 0.12,
       },
     },
-  };
+  } as const;
 
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.9, y: 20 },
@@ -113,7 +113,7 @@ export default function StatsBanner() {
       y: 0,
       transition: { type: 'spring', stiffness: 100, damping: 15 },
     },
-  };
+  } as const;
 
   return (
     <section className="py-10 bg-transparent transition-colors duration-300 relative z-10">
