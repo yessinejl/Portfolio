@@ -7,7 +7,7 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { Project } from '@/types/project';
 import { FaGithub } from 'react-icons/fa6';
-import { ArrowLeft, Calendar, Tag, Globe, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Calendar, Tag, Globe, ExternalLink, Code } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 
