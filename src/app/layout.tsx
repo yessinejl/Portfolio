@@ -52,7 +52,7 @@ export default function RootLayout({
           <LanguageProvider>
             <ProfileProvider>
               <Navbar />
-              <main className="flex-grow">
+              <main className="flex-grow pt-20 sm:pt-24">
                 {children}
               </main>
               <Footer />

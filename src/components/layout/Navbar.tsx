@@ -256,7 +256,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="fixed top-20 left-4 right-4 z-40 md:hidden bg-white/95 dark:bg-slate-950/95 backdrop-blur-2xl border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-2xl space-y-4"
+            className="fixed top-20 left-4 right-4 z-50 md:hidden bg-white/95 dark:bg-slate-950/95 backdrop-blur-2xl border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-2xl space-y-4"
           >
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-850">
               <div className="flex items-center gap-2 text-xs font-bold text-emerald-500">

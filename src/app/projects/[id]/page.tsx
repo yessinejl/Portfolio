@@ -89,7 +89,7 @@ export default function ProjectDetail() {
   if (!project) return null;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8 transition-colors duration-300">
+    <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 sm:px-6 lg:px-8 transition-colors duration-300">
           {/* Bouton retour */}
       <Link
         href="/#projects"
