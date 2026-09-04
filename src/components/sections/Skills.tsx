@@ -111,7 +111,7 @@ export default function Skills() {
   } as const;
 
   return (
-    <section id="skills" className="py-20 bg-slate-50/50 dark:bg-slate-900/10 transition-colors duration-300">
+    <section id="skills" className="py-20 bg-transparent transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* En-tête de section */}

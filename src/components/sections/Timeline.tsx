@@ -44,7 +44,7 @@ export default function Timeline() {
   };
 
   return (
-    <section id="experience" className="py-20 bg-white dark:bg-slate-950 transition-colors duration-300">
+    <section id="experience" className="py-20 bg-transparent transition-colors duration-300">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center max-w-2xl mx-auto mb-16">

@@ -25,6 +25,7 @@ const geistMono = Geist_Mono({
 });
 
 import Preloader from "@/components/ui/Preloader";
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
 
 export const metadata: Metadata = {
   title: "Yassine Jlassia | Développeur Full-Stack & Mobile",
@@ -46,6 +47,7 @@ export default function RootLayout({
         className={`${plusJakartaSans.variable} ${cairo.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300`}
       >
         <ThemeProvider>
+          <AnimatedBackground />
           <Preloader />
           <LanguageProvider>
             <ProfileProvider>

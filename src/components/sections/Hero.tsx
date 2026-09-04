@@ -38,7 +38,7 @@ export default function Hero() {
   } as const;
 
   return (
-    <section className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden px-4 py-20 sm:px-6 lg:px-8 bg-white dark:bg-slate-950 transition-colors duration-300">
+    <section className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden px-4 py-20 sm:px-6 lg:px-8 bg-transparent transition-colors duration-300">
       
       {/* Motif de grille géométrique en arrière-plan */}
       <div 

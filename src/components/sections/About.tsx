@@ -14,7 +14,7 @@ export default function About() {
   }
 
   return (
-    <section id="about" className="py-24 bg-slate-50 dark:bg-slate-900/50 transition-colors duration-300">
+    <section id="about" className="py-24 bg-transparent transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center gap-12 md:gap-20">
           

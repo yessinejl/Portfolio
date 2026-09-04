@@ -20,7 +20,7 @@ const defaultProfile: ProfileData = {
   github_url: 'https://github.com/Yassinejlassia',
   linkedin_url: 'https://linkedin.com/in/Yassinejlassia',
   about: "Étudiant en Licence Développement des Systèmes d'Information à l'ISET Médenine et Développeur Full-Stack passionné. Fort d'expériences concrètes avec Java/Spring Boot, Angular, React/React Native, Python (Django/Flask), Flutter et Symfony, je suis spécialisé dans la conception d'applications web et mobiles modernes, intelligentes et robustes.",
-  photoUrl: '/profile.webp',
+  photoUrl: '/photoYassine.png',
 };
 
 const ProfileContext = createContext<ProfileContextType>({
@@ -40,7 +40,7 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const data = docSnap.data() as ProfileData;
-        const photoUrl = (!data.photoUrl || data.photoUrl.includes('unsplash.com')) ? '/profile.webp' : data.photoUrl;
+        const photoUrl = (!data.photoUrl || data.photoUrl.includes('unsplash.com') || data.photoUrl === '/profile.webp') ? '/photoYassine.png' : data.photoUrl;
         setProfile({ id: docSnap.id, ...data, photoUrl });
       } else {
         setProfile(defaultProfile);

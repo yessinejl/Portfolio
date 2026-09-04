@@ -22,7 +22,7 @@ const profile = {
   github_url: "https://github.com/Yassinejlassia",
   linkedin_url: "https://linkedin.com/in/Yassinejlassia",
   about: "Étudiant en Licence Développement des Systèmes d'Information à l'ISET Médenine et Développeur Full-Stack passionné. Fort d'expériences concrètes avec Java/Spring Boot, Angular, React/React Native, Python (Django/Flask), Flutter et Symfony, je suis spécialisé dans la conception d'applications web et mobiles modernes, intelligentes et robustes.",
-  photoUrl: "/profile.webp"
+  photoUrl: "/photoYassine.png"
 };
 
 async function seed() {
